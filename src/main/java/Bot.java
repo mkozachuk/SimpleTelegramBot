@@ -58,11 +58,11 @@ public class Bot extends TelegramLongPollingBot {
 
         try (InputStream in = new URL(movie.getImage()).openStream()) {
 
-            Files.copy(in, Paths.get("/Users/maksymkozachuk/Desktop/t/1.jpg"));
+            Files.copy(in, Paths.get("/Users/maksymkozachuk/IdeaProjects/STB/src/main/resources/img/img.jpg"));
             sendPhoto.setChatId(chat_id);
-            sendPhoto.setPhoto(new File("/Users/maksymkozachuk/Desktop/t/1.jpg"));
+            sendPhoto.setPhoto(new File("/Users/maksymkozachuk/IdeaProjects/STB/src/main/resources/img/img.jpg"));
             execute(sendPhoto);
-            Files.delete(Paths.get("/Users/maksymkozachuk/Desktop/t/1.jpg"));
+            Files.delete(Paths.get("/Users/maksymkozachuk/IdeaProjects/STB/src/main/resources/img/img.jpg"));
 
         } catch (IOException e) {
             System.out.println("Image File Not Found");
