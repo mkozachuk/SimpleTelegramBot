@@ -28,6 +28,7 @@ public class Movie {
 
     public String getScore() {
         Elements elements = document.getElementsByClass("metascore_w larger movie positive");
+        elements.remove(1);
         return elements.text();
     }
 
