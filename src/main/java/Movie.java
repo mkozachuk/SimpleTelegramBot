@@ -22,7 +22,8 @@ public class Movie {
     }
 
     public String getTitle() {
-        return document.title();
+        Elements elements = document.getElementsByTag("h1");
+        return elements.text();
     }
 
     public String getScore() {
@@ -45,5 +46,10 @@ public class Movie {
         String url = elements.attr("src");
         return url;
 
+    }
+
+    public String getReleaseDate() {
+        Elements elements = document.getElementsByClass("release_date");
+        return elements.text();
     }
 }

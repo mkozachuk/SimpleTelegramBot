@@ -46,7 +46,7 @@ public class Bot extends TelegramLongPollingBot {
         if (msg.contains("Hi") || msg.contains("Cześć") || msg.contains("Hello")) {
             return "Hello!";
         }
-        if (msg.contains("info")) {
+        if (msg.contains("info") || msg.contains("Info")) {
             return getInfoMovie();
         }
         return msg;
@@ -70,10 +70,15 @@ public class Bot extends TelegramLongPollingBot {
             System.out.println("Exception when execute sendPhoto");
         }
 
-        String info = movie.getTitle()
+        String info = "Title: "
+                + movie.getTitle()
+                + "\n" + movie.getReleaseDate()
+                + "\n"
+                + "\nScore " + movie.getScore()
                 + "\n" + movie.getGenres()
-                + "\n Description " + movie.getDescription()
-                + "\n Score " + movie.getScore();
+                + "\n"
+                + "\nDescription " + movie.getDescription();
+
 
 
         return info;
