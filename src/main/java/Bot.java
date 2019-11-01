@@ -3,6 +3,8 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.File;
@@ -11,21 +13,28 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.nio.file.Files;
+import java.util.ArrayList;
 
 
 public class Bot extends TelegramLongPollingBot {
 
     private long chat_id;
+    String lastMessage = "";
     private Movie movie = new Movie();
+    ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
 
     public void onUpdateReceived(Update update) {
         update.getUpdateId();
 
         SendMessage sendMessage = new SendMessage().setChatId(update.getMessage().getChatId());
         chat_id = update.getMessage().getChatId();
-        sendMessage.setText(input(update.getMessage().getText()));
+
+
+        String text = update.getMessage().getText();
+        sendMessage.setReplyMarkup(replyKeyboardMarkup);
 
         try {
+            sendMessage.setText(getMessage(text));
             execute(sendMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
@@ -42,14 +51,26 @@ public class Bot extends TelegramLongPollingBot {
         return "977535205:AAFphfcBRD0vuO9DrjkqZFHvP8Gosg_sZnE";
     }
 
-    private String input(String msg) {
-        if (msg.contains("Hi") || msg.contains("Cześć") || msg.contains("Hello")) {
-            return "Hello!";
+    public String getMessage(String msg) {
+        ArrayList keyboard = new ArrayList();
+        KeyboardRow firstKeyboardRow = new KeyboardRow();
+        KeyboardRow secondKeyboardRow = new KeyboardRow();
+
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+
+        if (msg.equals("Hi") || msg.equals("Hello") || msg.equals("/start")) {
+            keyboard.clear();
+            firstKeyboardRow.clear();
+            firstKeyboardRow.add("In Theaters\uD83C\uDFAC");
+            firstKeyboardRow.add("Best Movies\uD83C\uDFC6");
+            secondKeyboardRow.add("Coming Soon\uD83D\uDD1C");
+            keyboard.add(firstKeyboardRow);
+            keyboard.add(secondKeyboardRow);
+            replyKeyboardMarkup.setKeyboard(keyboard);
         }
-        if (msg.contains("info") || msg.contains("Info")) {
-            return getInfoMovie();
-        }
-        return msg;
+        return "Choose...";
     }
 
     public String getInfoMovie() {
