@@ -7,22 +7,21 @@ import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
 
+    private long chat_id;
+
     public void onUpdateReceived(Update update) {
         update.getUpdateId();
 
         SendMessage sendMessage = new SendMessage().setChatId(update.getMessage().getChatId());
+        chat_id = update.getMessage().getChatId();
+        sendMessage.setText(input(update.getMessage().getText()));
 
-        if (update.getMessage().getText().equals("Cześć")){
-            sendMessage.setText("Cześć!");
-            try{
-                execute(sendMessage);
-            }
-            catch (TelegramApiException e){
-                e.printStackTrace();
-                System.out.println("Exception when execute sendMessage");
-            }
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+            System.out.println("Exception when execute sedMessage");
         }
-
     }
 
     public String getBotUsername() {
@@ -32,5 +31,12 @@ public class Bot extends TelegramLongPollingBot {
     public String getBotToken() {
 
         return "977535205:AAFphfcBRD0vuO9DrjkqZFHvP8Gosg_sZnE";
+    }
+
+    private String input(String msg) {
+        if (msg.contains("Hi") || msg.contains("Cześć") || msg.contains("Hello")) {
+            return "Hello!";
+        }
+        return msg;
     }
 }
